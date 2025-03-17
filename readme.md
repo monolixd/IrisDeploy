@@ -111,6 +111,3 @@ python test_api.py
 | **รัน Flask API** | ✅ `python app_flask.py` |
 | **รัน FastAPI** | ✅ `uvicorn app_fastapi:app --reload` |
 | **ทดสอบ API ผ่าน Python** | ✅ `python test_api.py` |
-
-📌 **ตอนนี้คุณสามารถนำเนื้อหานี้ไปสร้างไฟล์ Markdown (`README.md`) สำหรับ GitHub ได้แล้ว!** 🚀🔥  
-🔥 **มีอะไรที่ต้องการให้ฉันช่วยเพิ่มเติมไหม? 😊**
