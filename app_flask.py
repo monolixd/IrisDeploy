@@ -4,20 +4,37 @@ import numpy as np
 
 app = Flask(__name__)
 
+# โหลดโมเดล
 model = joblib.load("iris_model.pkl")
 
-#ทดสอบ Api
-@app.route('/')
+# สร้าง Dictionary แปลงค่าคลาสเป็นชื่อดอกไม้
+flower_classes = {0: "Setosa", 1: "Versicolor", 2: "Virginica"}
+
+@app.route("/")
 def home():
-    return "Flask Api Ready to use"
+    return "🚀 Flask API พร้อมใช้งาน!"
 
-#Routeทำนาย
-@app.route('/predict', methods=['POST'])
+@app.route("/predict", methods=["POST"])
 def predict():
-    data = request.get_json()
-    feature = np.array(data['feature']).reshape(1, -1) #แปลงข้อมูลให้อยู่ในรูปแบบ Array
-    prediction = model.predict(feature)
-    return jsonify({"prediction":int(prediction[0])})
+    try:
+        data = request.get_json()
+        print(f"📩 ข้อมูลที่ได้รับ: {data}")  # Log JSON ที่ได้รับ
 
-if __name__ == '__main__':
+        # เช็คว่า JSON มี key 'features' หรือไม่
+        if not data or "features" not in data:
+            return jsonify({"error": "Invalid JSON format"}), 400
+
+        features = np.array(data["features"]).reshape(1, -1)
+        prediction = model.predict(features)
+        
+        # แปลงค่าตัวเลขเป็นชื่อดอกไม้
+        flower_name = flower_classes[int(prediction[0])]
+
+        return jsonify({"prediction": flower_name})
+
+    except Exception as e:
+        print(f"❌ เกิดข้อผิดพลาด: {e}")  # Log Error
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == "__main__":
     app.run(debug=True)
